@@ -11,4 +11,4 @@ before_script:
 
 script:
   - docker-compose run user sh -c "python manage.py test && flake8"
-  - docker-compose run web sh -c "npm test --forceExit"
+  - docker-compose run web sh -c "yarn test"

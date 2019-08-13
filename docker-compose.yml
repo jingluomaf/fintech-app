@@ -36,4 +36,6 @@ services:
     volumes: 
       - /react-landing-page/node_modules
       - ./frontend/react-landing-page:/react-landing-page
+    environment: 
+      - CI=true
   
