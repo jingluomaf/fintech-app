@@ -11,5 +11,5 @@ before_script:
 
 script:
   - docker-compose run api sh -c "python manage.py test && flake8"
-  - docker-compose run web sh -c "yarn test"
+  - docker-compose run react sh -c "yarn test"
   
