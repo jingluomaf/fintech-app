@@ -10,8 +10,9 @@ RUN apk add --update --no-cache --virtual .tmp-build-deps \
 RUN pip install -r /requirements.txt
 RUN apk del .tmp-build-deps
 
+RUN mkdir django-user-api
 WORKDIR /django-user-api
-COPY ./app /django-user-api
+COPY ./app .
 
 RUN adduser -D user
 USER user
