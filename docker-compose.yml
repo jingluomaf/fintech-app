@@ -34,6 +34,9 @@ services:
 
   minio:
     image: minio/minio
+    environment:
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=supersecretpassword
     volumes:
      - minio-data:/data
     ports:
@@ -42,7 +45,6 @@ services:
       - backend
     command: server /data
 
-  
   web:
     build: 
       context: ./frontend/react-landing-page
@@ -57,7 +59,6 @@ services:
     networks: 
       - frontend
     
-
   jupyter:
     build: 
       context: ./jupyter-lab
@@ -71,6 +72,7 @@ services:
       - db
       - minio
     
+
 networks:
   frontend:
   backend:
