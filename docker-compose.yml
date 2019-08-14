@@ -1,36 +1,47 @@
 version: "3.7"
 
 services: 
-  user:
+  api:
     build: 
       context: ./backend/django-user-api/
-    
+    environment: 
+      - DB_HOST=$DB_HOST
+      - DB_NAME=$DB_NAME
+      - DB_USER=$DB_USER
+      - DB_PASS=$DB_PASS
     volumes: 
       - ./backend/django-user-api/app:/django-user-api
     command: >
       sh -c "python manage.py wait_for_db && 
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
-    environment: 
-      - DB_HOST=db
-      - DB_NAME=user
-      - DB_USER=postgres
-      - DB_PASS=supersecretpassword
     ports: 
-      - "8000:8000"
+      - $USER_PORT:8000
     networks: 
       - backend
     depends_on: 
-      - db
+      - postgres
+      - redis
 
-  db:
-    image: postgres:10-alpine
+  postgres:
+    image: postgres
+    restart: always
     environment: 
-      - POSTGRES_DB=user
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=supersecretpassword
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    volumes: 
+      - postgres:/var/lib/postgresql/data
+      - ./backend/postgres/service:/docker-entrypoint-initdb.d
+    ports: 
+      - $POSTGRES_PORT:8000
     networks: 
       - backend
+
+  redis:
+    image: redis
+    volumes:
+      - redis:/data
 
   minio:
     image: minio/minio
@@ -38,7 +49,7 @@ services:
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=supersecretpassword
     volumes:
-     - minio-data:/data
+     - minio:/data
     ports:
         - 9000:9000
     networks: 
@@ -69,16 +80,32 @@ services:
     networks: 
       - lab
     depends_on: 
-      - db
+      - postgres
       - minio
-    
+      
+  
+  airflow:
+    image: puckel/docker-airflow
+    environment: 
+      - LOAD_EX=n
+      - EXECUTOR=Local
+    ports:
+      - 8080:8080
+    networks: 
+      - backend
+    depends_on:
+      - postgres
+    command: webserver
+
 
 networks:
   frontend:
   backend:
   lab:
 volumes:
-  minio-data:
+  postgres:
+  minio:
+  redis:
 
 
 
