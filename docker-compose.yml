@@ -5,8 +5,7 @@ services:
 
   api:
     build: 
-      context: ./backend/django-user-api/
-    container_name: api    
+      context: ./backend/django-user-api/ 
     environment: 
       - DB_HOST=$DB_HOST
       - DB_NAME=$DB_NAME
@@ -28,6 +27,7 @@ services:
 
   postgres:
     image: postgres
+    restart: always
     environment: 
       - POSTGRES_DB=$POSTGRES_DB
       - POSTGRES_USER=$POSTGRES_USER
