@@ -1,15 +1,19 @@
-
-language: python
-python:
-  - "3.6"
-
+sudo: required
 services:
   - docker
-
-before_script: 
-  - pip install docker-compose
 
 script:
   - docker-compose run django sh -c "python manage.py test && flake8"
   - docker-compose run react sh -c "yarn test"
   
+after_success:
+  - docker build -t jingluomaf/multi-react ./frontend/react-landing-page
+  - docker build -t jingluomaf/multi-nginx ./nginx
+  - docker build -t jingluomaf/multi-django ./backend/django-user-api
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those production images and push them to docker hub
+  - docker push jingluomaf/multi-react
+  - docker push jingluomaf/multi-nginx
+  - docker push jingluomaf/multi-django
+
