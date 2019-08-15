@@ -1,9 +1,14 @@
 version: "3.7"
 
 services: 
-  
-
-  api:
+  nginx:
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    restart: always
+    ports: 
+      - 3050:80
+  django:
     build: 
       context: ./backend/django-user-api/ 
     environment: 
@@ -19,12 +24,9 @@ services:
              python manage.py runserver 0.0.0.0:8000"
     ports: 
       - $USER_PORT:8000
-    networks: 
-      - backend
     depends_on: 
       - postgres
       - redis
-
   postgres:
     image: postgres
     restart: always
@@ -35,17 +37,14 @@ services:
     volumes: 
       - postgres:/var/lib/postgresql/data
       - ./backend/postgres/service:/docker-entrypoint-initdb.d
-    networks: 
-      - backend
-
   redis:
     image: redis
+    restart: always
     volumes:
       - redis:/data
-
   minio:
     image: minio/minio
-    container_name: minio
+    restart: always
     environment:
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=supersecretpassword
@@ -53,15 +52,11 @@ services:
      - minio:/data
     ports:
         - 9000:9000
-    networks: 
-      - backend
     command: server /data
-
   react:
     build: 
       context: ./frontend/react-landing-page
       dockerfile: Dockerfile.dev
-    container_name: react
     environment: 
       - CI=true   
     volumes: 
@@ -69,41 +64,26 @@ services:
       - ./frontend/react-landing-page:/react-landing-page
     ports: 
       - 3000:3000
-    
   jupyter:
     build: 
       context: ./jupyter-lab
-    container_name: jupyter
     volumes: 
       - ./jupyter-lab/:/jupyter-lab
     ports: 
       - "8888:8888"
-    networks: 
-      - lab
     depends_on: 
       - postgres
       - minio
-      
-  
   airflow:
     image: puckel/docker-airflow
-    container_name: airflow
     environment: 
       - LOAD_EX=n
       - EXECUTOR=Local
     ports:
       - 8081:8080
-    networks: 
-      - backend
     depends_on:
       - postgres
     command: webserver
-
-
-networks:
-  frontend:
-  backend:
-  lab:
 volumes:
   postgres:
   minio:
