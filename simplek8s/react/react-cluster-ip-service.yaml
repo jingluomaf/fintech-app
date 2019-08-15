@@ -5,7 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    component: web
+    app: react-deployment
   ports:
     - port: 3000
       targetPort: 3000
