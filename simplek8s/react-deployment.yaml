@@ -15,9 +15,5 @@ spec:
       containers:
       - name: react
         image: jingluomaf/multi-react
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 3000

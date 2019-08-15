@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Check change!
+          Check change in k8s!
         </a>
       </header>
     </div>
