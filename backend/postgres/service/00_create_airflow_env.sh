@@ -9,5 +9,5 @@ AIRFLOW_PASSWORD="airflow"
 AIRFLOW_DB="airflow"
 set +a
 
-/docker-entrypoint-initdb.d/01_create_airflow_user.sh
-/docker-entrypoint-initdb.d/02_create_airflow_db.sh
+/docker-entrypoint-initdb.d/create/create_airflow_user.sh
+/docker-entrypoint-initdb.d/create/create_airflow_db.sh

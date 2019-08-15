@@ -6,5 +6,5 @@ POSTGRES="psql --username ${POSTGRES_USER}"
 # create database for superset
 echo "Creating database: ${AIRFLOW_DB}"
 $POSTGRES <<EOSQL
-CREATE DATABASE ${AIRFLOW_DB} OWNER ${AIRFLOW_USER};
+CREATE DATABASE $AIRFLOW_DB OWNER $AIRFLOW_USER;
 EOSQL
