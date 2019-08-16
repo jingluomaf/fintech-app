@@ -12,8 +12,20 @@ spec:
       labels:
         app: postgres-deployment
     spec:
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
       containers:
       - name: postgres-deployment
         image: postgres
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
         ports:
         - containerPort: 5432
+        volumeMounts:
+          - name: postgres-storage
+            mountPath: /var/lib/postgresql/data
+            subPath: postgres

@@ -15,5 +15,16 @@ spec:
       containers:
       - name: django-deployment
         image: jingluomaf/multi-django
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
         ports:
         - containerPort: 8000
+        env:
+          - name: DB_HOST
+            value: postgres-cluster-ip-service
+          - name: DB_USER
+            value: postgres
+          - name: DB_PASS
+            value: postgres
