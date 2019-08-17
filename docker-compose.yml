@@ -6,83 +6,90 @@ services:
       context: ./nginx
       dockerfile: Dockerfile.dev
     restart: always
+    volumes: 
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    - ./jupyter-lab/cert.crt:/data/cert.crt
+    - ./jupyter-lab/key.key:/data/key.key
     ports: 
-      - 3050:80
+    - $NGINX_PORT:80
+    - 443:443
   django:
     build: 
       context: ./backend/django-user-api/ 
     environment: 
-      - DB_HOST=$DB_HOST
-      - DB_NAME=$DB_NAME
-      - DB_USER=$DB_USER
-      - DB_PASS=$DB_PASS
+    - DB_HOST=$DB_HOST
+    - DB_NAME=$DB_NAME
+    - DB_USER=$DB_USER
+    - DB_PASS=$DB_PASS
     volumes: 
-      - ./backend/django-user-api/app:/django-user-api
+    - ./backend/django-user-api/app:/django-user-api
     command: >
       sh -c "python manage.py wait_for_db && 
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     ports: 
-      - $USER_PORT:8000
+    - $USER_PORT:8000
     depends_on: 
-      - postgres
-      - redis
+    - postgres
+    - redis
   postgres:
     image: postgres
     restart: always
     environment: 
-      - POSTGRES_DB=$POSTGRES_DB
-      - POSTGRES_USER=$POSTGRES_USER
-      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    - POSTGRES_DB=$POSTGRES_DB
+    - POSTGRES_USER=$POSTGRES_USER
+    - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     volumes: 
-      - postgres:/var/lib/postgresql/data
-      - ./backend/postgres/service:/docker-entrypoint-initdb.d
+    - postgres:/var/lib/postgresql/data
+    - ./backend/postgres/service:/docker-entrypoint-initdb.d
   redis:
     image: redis
     restart: always
     volumes:
-      - redis:/data
+    - redis:/data
   minio:
     image: minio/minio
     restart: always
     environment:
-      - MINIO_ACCESS_KEY=minio
-      - MINIO_SECRET_KEY=supersecretpassword
+    - MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY
+    - MINIO_SECRET_KEY=$MINIO_SECRET_KEY
     volumes:
-     - minio:/data
+    - minio:/data
     ports:
-        - 9000:9000
+    - $MINIO_PORT:9000
     command: server /data
   react:
     build: 
       context: ./frontend/react-landing-page
       dockerfile: Dockerfile.dev
     environment: 
-      - CI=true   
+    - CI=$CI  
+    - CHOKIDAR_USEPOLLING=$CHOKIDAR_USEPOLLING
     volumes: 
-      - /react-landing-page/node_modules
-      - ./frontend/react-landing-page:/react-landing-page
+    - /react-landing-page/node_modules
+    - ./frontend/react-landing-page:/react-landing-page
     ports: 
-      - 3000:3000
+    - $REACT_PORT:3000
   jupyter:
     build: 
       context: ./jupyter-lab
     volumes: 
-      - ./jupyter-lab/:/jupyter-lab
+    - ./jupyter-lab/:/jupyter-lab
     ports: 
-      - "8888:8888"
+    - $JUPYTER_PORT:8888
     depends_on: 
-      - postgres
-      - minio
+    - postgres
+    - minio
+
   airflow:
     image: puckel/docker-airflow
     environment: 
-      - LOAD_EX=n
-      - EXECUTOR=Local
+    - LOAD_EX=n
+    - EXECUTOR=Local
     ports:
-      - 8081:8080
+    - $AIRFLOW_PORT:8080
     depends_on:
-      - postgres
+    - postgres
     command: webserver
 volumes:
   postgres:

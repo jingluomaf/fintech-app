@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Check change in k8s!
+          Test hot relo
         </a>
       </header>
     </div>
