@@ -10,6 +10,7 @@ services:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     - ./jupyter-lab/cert.crt:/data/cert.crt
     - ./jupyter-lab/key.key:/data/key.key
+    - ./jupyter-lab/dhparam.pem:/etc/ssl/certs/dhparam.pem
     ports: 
     - $NGINX_PORT:80
     - 443:443
@@ -74,13 +75,13 @@ services:
     build: 
       context: ./jupyter-lab
     volumes: 
-    - ./jupyter-lab/:/jupyter-lab
+    - ./jupyter-lab/python-file:/jupyter-lab/python-file
+    - ./jupyter-lab/r-file:/jupyter-lab/r-file
     ports: 
     - $JUPYTER_PORT:8888
     depends_on: 
     - postgres
     - minio
-
   airflow:
     image: puckel/docker-airflow
     environment: 
@@ -91,11 +92,19 @@ services:
     depends_on:
     - postgres
     command: webserver
+  portainer:
+    restart: "always"
+    image: portainerci/portainer:fix2556-frequent-offline-mode
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer:/data
+    ports:
+      - $PORTAINER_PORT:9000
 volumes:
   postgres:
   minio:
   redis:
-
+  portainer:
 
 
   

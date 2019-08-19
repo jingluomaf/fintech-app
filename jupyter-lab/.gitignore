@@ -1,4 +1,3 @@
-Dockerfile
 dhparam.pem
 cert.crt
 key.key
