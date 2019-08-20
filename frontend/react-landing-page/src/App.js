@@ -1,24 +1,14 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Test <code>src/App.js</code> and save sf
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Test hot relo
-        </a>
-      </header>
+      <iframe title="w3" src="http://test:9000" width="100%" />
+      <iframe title="w3" src="http://test:8000" width="100%" />
+      <iframe title="w3" src="http://test:8080" width="100%" />
+      <iframe title="w3" src="http://test:8888" width="100%" />
+      <iframe title="w3" src="http://test:9090" width="100%" />
     </div>
   );
 }

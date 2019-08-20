@@ -25,7 +25,7 @@ SECRET_KEY = 'a*nsm&o1r&wl-$tp+op7w0x)=^6v2#gy+n)42)h#!_@=0u^g=b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['django']
+ALLOWED_HOSTS = ['test']
 
 
 # Application definition
@@ -127,3 +127,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'core.User'
+
+X_FRAME_OPTIONS = 'ALLOWALL'
+
+XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
