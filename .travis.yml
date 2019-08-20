@@ -13,13 +13,13 @@ script:
   - docker-compose run react sh -c "yarn test --forceExit"
   
 after_success:
-  - docker build -t jingluomaf/multi-react ./frontend/react-landing-page
-  - docker build -t jingluomaf/multi-nginx ./nginx
-  - docker build -t jingluomaf/multi-django ./backend/django-user-api
+  - docker build -t jingluomaf/fintech-react ./frontend/react-landing-page
+  - docker build -t jingluomaf/fintech-django ./backend/django-user-api
+  - docker build -t jingluomaf/fintech-jupyter ./jupyter
+  - docker build -t jingluomaf/fintech-django ./backend/django-user-api
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those production images and push them to docker hub
-  - docker push jingluomaf/multi-react
-  - docker push jingluomaf/multi-nginx
-  - docker push jingluomaf/multi-django
+  - docker push jingluomaf/fintech-react
+  - docker push jingluomaf/fintech-django
 

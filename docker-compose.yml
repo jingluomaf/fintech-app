@@ -61,10 +61,10 @@ services:
     - $REACT_PORT:3000
   jupyter:
     build: 
-      context: ./jupyter-lab
+      context: ./jupyter
     volumes: 
-    - ./jupyter-lab/python-file:/jupyter-lab/python-file
-    - ./jupyter-lab/r-file:/jupyter-lab/r-file
+    - ./jupyter/python-file:/jupyter/python-file
+    - ./jupyter/r-file:/jupyter/r-file
     ports: 
     - $JUPYTER_PORT:8888
     depends_on: 
