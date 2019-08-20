@@ -10,7 +10,7 @@ before_script:
 
 script:
   - docker-compose run django sh -c "python manage.py test && flake8"
-  - docker-compose run react sh -c "yarn test"
+  - docker-compose run react sh -c "yarn test --forceExit"
   
 after_success:
   - docker build -t jingluomaf/multi-react ./frontend/react-landing-page

@@ -1,13 +1,6 @@
 version: "3.7"
 
-services: 
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    ports:
-      - 80:80
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./hosts:/etc/hosts
+services:
   django:
     build: 
       context: ./backend/django-user-api/ 
