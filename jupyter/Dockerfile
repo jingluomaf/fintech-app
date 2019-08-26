@@ -4,4 +4,4 @@ RUN mkdir jupyter
 WORKDIR /jupyter
 RUN pip install psycopg2-binary\
     minio
-RUN RUN Rscript -e "install.packages('stringr')"
+RUN R -e "install.packages('psych', repos = 'http://cran.us.r-project.org')"
