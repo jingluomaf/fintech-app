@@ -67,6 +67,7 @@ services:
     volumes:
       - ./jupyter/python-file:/jupyter/python-file
       - ./jupyter/r-file:/jupyter/r-file
+      - ./jupyter/csv-file:/jupyter/csv-file
     ports:
       - $JUPYTER_PORT:8888
     depends_on:
