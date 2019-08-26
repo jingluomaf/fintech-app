@@ -4,4 +4,3 @@ RUN mkdir jupyter
 RUN pip install psycopg2-binary\
     minio
 WORKDIR /jupyter
-COPY . .

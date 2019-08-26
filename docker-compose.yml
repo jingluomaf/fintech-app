@@ -62,6 +62,8 @@ services:
   jupyter:
     build:
       context: ./jupyter
+    env_file:
+      - .env
     volumes:
       - ./jupyter/python-file:/jupyter/python-file
       - ./jupyter/r-file:/jupyter/r-file
