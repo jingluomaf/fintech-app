@@ -2,88 +2,89 @@ version: "3.7"
 
 services:
   django:
-    build: 
-      context: ./backend/django-user-api/ 
-    environment: 
-    - DB_HOST=$DB_HOST
-    - DB_NAME=$DB_NAME
-    - DB_USER=$DB_USER
-    - DB_PASS=$DB_PASS
-    - VIRTUAL_HOST=django
-    volumes: 
-    - ./backend/django-user-api/app:/django-user-api
+    build:
+      context: ./backend/django-user-api/
+    environment:
+      - DB_HOST=$DB_HOST
+      - DB_NAME=$DB_NAME
+      - DB_USER=$DB_USER
+      - DB_PASS=$DB_PASS
+      - VIRTUAL_HOST=django
+    volumes:
+      - ./backend/django-user-api/app:/django-user-api
     command: >
       sh -c "python manage.py wait_for_db && 
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
-    ports: 
+    ports:
       - $USER_PORT:8000
-    depends_on: 
-    - postgres
-    - redis
+    depends_on:
+      - postgres
+      - redis
   postgres:
     image: postgres
     restart: always
-    environment: 
-    - POSTGRES_DB=$POSTGRES_DB
-    - POSTGRES_USER=$POSTGRES_USER
-    - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-    volumes: 
-    - postgres:/var/lib/postgresql/data
-    - ./backend/postgres/service:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./backend/postgres/service:/docker-entrypoint-initdb.d
   redis:
     image: redis
     restart: always
     volumes:
-    - redis:/data
+      - redis:/data
   minio:
     image: minio/minio
     restart: always
     environment:
-    - MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY
-    - MINIO_SECRET_KEY=$MINIO_SECRET_KEY
+      - MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY
+      - MINIO_SECRET_KEY=$MINIO_SECRET_KEY
     volumes:
-    - minio:/data
+      - minio:/data
     ports:
-    - $MINIO_PORT:9000
+      - $MINIO_PORT:9000
     command: server /data
   react:
-    build: 
+    build:
       context: ./frontend/react-landing-page
       dockerfile: Dockerfile.dev
-    environment: 
-    - CI=$CI  
-    - CHOKIDAR_USEPOLLING=$CHOKIDAR_USEPOLLING
-    volumes: 
-    - /react-landing-page/node_modules
-    - ./frontend/react-landing-page:/react-landing-page
-    ports: 
-    - $REACT_PORT:3000
+    environment:
+      - CI=$CI
+      - CHOKIDAR_USEPOLLING=$CHOKIDAR_USEPOLLING
+    volumes:
+      - /react-landing-page/node_modules
+      - ./frontend/react-landing-page:/react-landing-page
+    ports:
+      - $REACT_PORT:3000
   jupyter:
-    build: 
+    build:
       context: ./jupyter
-    volumes: 
-    - ./jupyter/python-file:/jupyter/python-file
-    - ./jupyter/r-file:/jupyter/r-file
-    ports: 
-    - $JUPYTER_PORT:8888
-    depends_on: 
-    - postgres
-    - minio
+    volumes:
+      - ./jupyter/python-file:/jupyter/python-file
+      - ./jupyter/r-file:/jupyter/r-file
+    ports:
+      - $JUPYTER_PORT:8888
+    depends_on:
+      - postgres
+      - minio
+    entrypoint: sh -c 'start-notebook.sh --NotebookApp.token=$$JUPYTER_PASSWORD'
   airflow:
     image: puckel/docker-airflow
-    environment: 
-    - LOAD_EX=n
-    - EXECUTOR=Local
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=Local
     ports:
-    - $AIRFLOW_PORT:8080
+      - $AIRFLOW_PORT:8080
     depends_on:
-    - postgres
+      - postgres
     command: webserver
   portainer:
     restart: "always"
     image: portainer/portainer
-    volumes: 
+    volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer:/data
     ports:
@@ -93,6 +94,3 @@ volumes:
   minio:
   redis:
   portainer:
-
-
-  

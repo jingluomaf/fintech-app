@@ -2,3 +2,4 @@ Dockerfile
 dhparam.pem
 cert.crt
 key.key
+jupyter_notebook_config.py
