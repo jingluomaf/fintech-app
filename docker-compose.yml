@@ -45,8 +45,8 @@ services:
     volumes:
       - minio:/data
     ports:
-      - $MINIO_PORT:9000
-    command: server /data
+      - $MINIO_PORT:9090
+    command: server --address :9090 /data
   react:
     build:
       context: ./frontend/react-landing-page
