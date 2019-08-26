@@ -35,6 +35,15 @@ export const Header = ({ currentUser, hidden, signOutStart }) => (
       </OptionWeb>
       <OptionWeb>
         <a
+          href="http://localhost:8088"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          SUPERSET
+        </a>
+      </OptionWeb>
+      <OptionWeb>
+        <a
           href="http://localhost:8000"
           target="_blank"
           rel="noopener noreferrer"

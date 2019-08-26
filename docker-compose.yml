@@ -83,6 +83,16 @@ services:
     depends_on:
       - postgres
     command: webserver
+  superset:
+    image: tylerfowler/superset
+    depends_on:
+      - postgres
+    environment:
+      - ADMIN_USERNAME=$ADMIN_USERNAME
+      - ADMIN_PWD=$ADMIN_PWD
+      - SUP_META_DB_URI=postgres://superset:superset@postgres/superset
+    ports:
+      - $SUPERSET_PORT:8088
   portainer:
     restart: "always"
     image: portainer/portainer
