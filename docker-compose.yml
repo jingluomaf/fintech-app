@@ -81,6 +81,8 @@ services:
     environment:
       - LOAD_EX=n
       - EXECUTOR=Local
+    volumes:
+      - ./airflow/dags:/usr/local/airflow/dags
     ports:
       - $AIRFLOW_PORT:8080
     depends_on:
