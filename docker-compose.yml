@@ -68,6 +68,8 @@ services:
       - ./jupyter/python-file:/jupyter/python-file
       - ./jupyter/r-file:/jupyter/r-file
       - ./jupyter/csv-file:/jupyter/csv-file
+      - ./jupyter/pdf-file:/jupyter/pdf-file
+      - ./jupyter/txt-file:/jupyter/txt-file
     ports:
       - $JUPYTER_PORT:8888
     depends_on:
