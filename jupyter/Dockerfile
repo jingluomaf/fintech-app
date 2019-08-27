@@ -1,7 +1,8 @@
 FROM jupyter/all-spark-notebook
 COPY ./jupyter_notebook_config.py /config/location/jupyter_notebook_config.py
 RUN mkdir jupyter
+COPY ./requirements.txt /jupyter/requirements.txt
+COPY ./requirements.r /jupyter/requirements.r
 WORKDIR /jupyter
-RUN pip install psycopg2-binary\
-    minio
-RUN R -e "install.packages('psych', repos = 'http://cran.us.r-project.org')"
+RUN pip install -r requirements.txt
+RUN Rscript requirements.r
