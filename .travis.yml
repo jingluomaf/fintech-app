@@ -5,21 +5,20 @@ python:
 services:
   - docker
 
-before_script: 
+before_script:
   - pip install docker-compose
 
 script:
   - docker-compose run django sh -c "python manage.py test && flake8"
   - docker-compose run react sh -c "yarn test --forceExit"
-  
+
 after_success:
   - docker build -t jingluomaf/fintech-react ./frontend/react-landing-page
   - docker build -t jingluomaf/fintech-django ./backend/django-user-api
   - docker build -t jingluomaf/fintech-jupyter ./jupyter
-  - docker build -t jingluomaf/fintech-django ./backend/django-user-api
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those production images and push them to docker hub
   - docker push jingluomaf/fintech-react
   - docker push jingluomaf/fintech-django
-
+  - docker push jingluomaf/fintech-jupyter
