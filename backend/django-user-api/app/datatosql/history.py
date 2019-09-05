@@ -6,10 +6,18 @@ import os
 
 
 def histricalDataToSQL(tickers):
+    user = os.environ['DB_USER']
+    password = os.environ['DB_PASS']
+    host = os.environ['DB_HOST']
+    port = os.environ['DB_PORT']
 
-    engine = create_engine('postgresql://'+os.environ['POSTGRESQL_USER']+':' +
-                           os.environ['POSTGRESQL_PASSWORD']+'@' +
-                           os.environ['POSTGRESQL_HOST_IP']+':'+os.environ['POSTGRESQL_PORT']+'/stock', echo=False)
+    engine = create_engine('postgresql://' +
+                           user + ':' +
+                           password + '@' +
+                           host + ':' +
+                           port +
+                           '/stock', echo=False)
+
     result_by_method = getattr(yf.Ticker(tickers), 'history')(period="max")
     result_by_method.index.names = ['date']
     result_by_method.columns = result_by_method.columns.str.lower()
