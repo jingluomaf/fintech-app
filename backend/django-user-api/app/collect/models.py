@@ -1,5 +1,5 @@
 from django.db import models
-from datatosql.history import histricalDataToSQL
+# from datatosql.history import histricalDataToSQL
 
 
 # class HistoricalDataManager(models.Manager):
@@ -55,7 +55,8 @@ class HistoricalData(models.Model):
 #         class Meta:
 #             db_table = '%s_historical_data' % name.lower()
 #         attrs = {'__module__': baseclass.__module__, 'Meta': Meta}
-#         # specify any other class attributes here. E.g. you can specify extra fields:
+#         # specify any other class attributes here
+#         # E.g. you can specify extra fields:
 #         # attrs.update({'my_field': models.CharField(max_length=100)})
 #         # newclass = type(str(name), (baseclass,), attrs)
 #         # globals()[name] = newclass

@@ -1,5 +1,5 @@
-import pandas as pd
-from pandas_datareader import data as pdr
+# import pandas as pd
+# from pandas_datareader import data as pdr
 import yfinance as yf
 from sqlalchemy import create_engine, types
 import os
@@ -7,7 +7,8 @@ import os
 
 def histricalDataToSQL(tickers):
 
-    engine = create_engine('postgresql://'+os.environ['POSTGRESQL_USER']+':'+os.environ['POSTGRESQL_PASSWORD']+'@' +
+    engine = create_engine('postgresql://'+os.environ['POSTGRESQL_USER']+':' +
+                           os.environ['POSTGRESQL_PASSWORD']+'@' +
                            os.environ['POSTGRESQL_HOST_IP']+':'+os.environ['POSTGRESQL_PORT']+'/stock', echo=False)
     result_by_method = getattr(yf.Ticker(tickers), 'history')(period="max")
     result_by_method.index.names = ['date']
